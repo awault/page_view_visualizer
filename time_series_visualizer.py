@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import calendar
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
@@ -19,7 +20,7 @@ def draw_line_plot():
     df['date'] = pd.to_datetime(df['date'])
     fig, ax = plt.subplots(figsize=(12,4))
     ax.plot(df['date'], df['value'], color='r', linewidth=1)
-    ax.set_title('Daily FreeCodeCamp Forum Page Views 5/2016-12/2019')
+    ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
     ax.set_xlabel('Date')
     ax.set_ylabel('Page Views')
 
@@ -42,6 +43,8 @@ def draw_bar_plot():
     df_bar.plot(kind='bar',ax=ax)
     ax.set_title('Average Daily Page Views')
     ax.legend(labels=month_names, title='Months', loc='upper left')
+    ax.set_xlabel('Years')
+    ax.set_ylabel('Average Page Views')
     
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
@@ -55,10 +58,23 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
+    fig, axes = plt.subplots(1,2, figsize=(15,5))
 
+    # Year-wise Box Plot
+    sns.boxplot(x='year',y='value', hue='year', data=df_box,\
+                ax=axes[0],fliersize=2, palette='deep')
+    axes[0].set_title('Year-wise Box Plot (Trend)')
+    axes[0].set_xlabel('Year')
+    axes[0].set_ylabel('Page Views')
 
-
-
+    # Month-wise Box Plot
+    sns.boxplot(x='month', y='value', hue='month', data=df_box,\
+                ax=axes[1], order=['Jan', 'Feb', 'Mar', 'Apr', 'May',\
+                 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                width=0.7, fliersize=2, palette='pastel') 
+    axes[1].set_title('Month-wise Box Plot (Seasonality)')
+    axes[1].set_xlabel('Month')
+    axes[1].set_ylabel('Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
