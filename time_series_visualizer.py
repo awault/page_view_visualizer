@@ -16,10 +16,12 @@ df = df[rem_top_outliers & rem_bot_outliers]
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    df['date'] = pd.to_datetime(df['date'])
+    fig, ax = plt.subplots(figsize=(12,4))
+    ax.plot(df['date'], df['value'], color='r', linewidth=1)
+    ax.set_title('Daily FreeCodeCamp Forum Page Views 5/2016-12/2019')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
