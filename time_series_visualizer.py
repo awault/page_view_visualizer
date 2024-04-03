@@ -29,14 +29,20 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    data = df.copy()
+    data['year'] = data['date'].dt.year
+    data['month'] = data['date'].dt.month
+    df_bar = data.groupby(['year','month'])['value'].mean().unstack()
+
+    # Get month names
+    month_names = [calendar.month_name[i] for i in range(1, 13)] 
 
     # Draw bar plot
-
-
-
-
-
+    fig,ax = plt.subplots(figsize=(10,6))
+    df_bar.plot(kind='bar',ax=ax)
+    ax.set_title('Average Daily Page Views')
+    ax.legend(labels=month_names, title='Months', loc='upper left')
+    
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
